@@ -20,6 +20,10 @@ distance[x] = 0
 queue = deque([x])
 while queue:
     now = queue.popleft()
+    
+    # 거리가 k면 탐색 종료 
+    if distance[now] == k:
+        continue
 
     # 현재 도시에서 갈 수 있는 모든 이웃 도시 확인
     for next_node in graph[now]:
