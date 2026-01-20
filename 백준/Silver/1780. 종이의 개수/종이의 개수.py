@@ -23,6 +23,9 @@ def solve(x, y, size):
         for j in range(y, y + size):
             if paper[i][j] != first_num:
                 is_same = False
+                break 
+        if not is_same:
+            break
     
     # 모두 같다면 해당 숫자 카운트
     if is_same:
