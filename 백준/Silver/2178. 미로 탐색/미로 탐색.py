@@ -1,30 +1,45 @@
 import sys
 from collections import deque
+
 input = sys.stdin.readline
 
-N, M = map(int, input().split())
+def bfs():
+    dx = [-1, 1, 0, 0]
+    dy = [0, 0, -1, 1]
+    
+    # (0, 0)에서 시작
+    queue = deque([(0, 0)])
+    
+    while queue:
+        now_x, now_y = queue.popleft()
+        
+        # 상하좌우 확인
+        for i in range(4):
+            nx = now_x + dx[i]
+            ny = now_y + dy[i]
+            
+            # 미로 범위를 벗어나는지 확인
+            if nx < 0 or nx >= n or ny < 0 or ny >= m:
+                continue
+            
+            # 벽인지 확인
+            if graph[nx][ny] == 0:
+                continue
+            
+            # 처음 방문하는 길인 경우만 탐색 
+            if graph[nx][ny] == 1:
+                # 이전 칸의 거리 값 + 1을 현재 칸에 저장
+                graph[nx][ny] = graph[now_x][now_y] + 1
+                queue.append((nx, ny))
+                
+    # 최단 거리 값 반환
+    return graph[n-1][m-1]
 
-# 미로 정보 입력 (공백 없이 붙어 있으므로 strip()으로 문자열을 숫자로 분해)
-graph = [list(map(int, input().strip())) for _ in range(N)]
+n, m = map(int, input().split())
 
-# 이동 방향
-di = [0, 0, 1, -1]
-dj = [1, -1, 0, 0]
+# 미로 정보
+graph = []
+for _ in range(n):
+    graph.append(list(map(int, input().strip())))
 
-def bfs(start_i, start_j):
-    q = deque()
-    q.append((start_i, start_j))    # 시작점 인큐
-    while q:
-        i, j = q.popleft()
-        for k in range(4):
-            ni, nj = i + di[k], j + dj[k]
-            # 범위 안이고, 이동 가능한 길(1)이면
-            if 0 <= ni < N and 0 <= nj < M and graph[ni][nj] == 1:
-                graph[ni][nj] = graph[i][j] + 1  # 거리 갱신
-                q.append((ni, nj))
-
-# BFS 시작점 
-bfs(0, 0)
-
-# 도착점 (N-1,M-1)까지의 거리 출력
-print(graph[N-1][M-1])
+print(bfs())
