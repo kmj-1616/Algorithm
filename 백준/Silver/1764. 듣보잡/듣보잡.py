@@ -1,20 +1,28 @@
 import sys
+
 input = sys.stdin.readline
 
-N, M = map(int, input().split())
-no_h = set()
-no_s = set()
-no_both = []
+def get_unheard_unseen():
+    # n: 듣도 못한 사람 수, m: 보도 못한 사람 수
+    n, m = map(int, input().split())
+    
+    # 듣도 못한 사람들을 set 저장 
+    unheard = set()
+    for _ in range(n):
+        unheard.add(input().strip())
+    
+    # 보도 못한 사람들을 확인하면서 교집합 찾기
+    result = []
+    for _ in range(m):
+        name = input().strip()
+        if name in unheard:
+            result.append(name)
+    
+    # 사전순 정렬
+    result.sort()
+    
+    print(len(result))
+    for name in result:
+        print(name)
 
-for _ in range(N):
-    no_h.add(input())   
-for _ in range(M):
-    no_s.add(input())
-
-for name in no_h:   # 듣도 못한 이름이
-    if name in no_s:    # 보도 못한 이름 리스트에 있으면
-        no_both.append(name)    # 듣보잡 리스트에 추가
-no_both.sort()  # 사전순 정렬
-
-print(len(no_both))
-print(''.join(no_both), end='')
+get_unheard_unseen()
