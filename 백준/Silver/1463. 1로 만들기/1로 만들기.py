@@ -1,27 +1,29 @@
 import sys
+
 input = sys.stdin.readline
 
-N = int(input())
+def make_one():
+    n = int(input())
+    
+    # dp[i]는 숫자 i를 1로 만드는 데 필요한 최소 연산 횟수
+    # 0부터 n까지 담아야 하므로 n+1 크기로 생성
+    dp = [0] * (n + 1)
+    
+    # 2부터 n까지 반복하며 최솟값 갱신
+    for i in range(2, n + 1):
+        # 1. 먼저 1을 빼는 경우 (기본값)
+        # i에서 1을 뺀 i-1의 결과값에 연산 횟수 1을 더함
+        dp[i] = dp[i-1] + 1
+        
+        # 2. 2로 나누어떨어지는 경우, 1번 결과와 비교하여 최솟값 선택
+        if i % 2 == 0:
+            dp[i] = min(dp[i], dp[i//2] + 1)
+            
+        # 3. 3으로 나누어떨어지는 경우, 현재 결과와 비교하여 최솟값 선택
+        if i % 3 == 0:
+            dp[i] = min(dp[i], dp[i//3] + 1)
+            
+    print(dp[n])
 
-def recur(n, count):
-    global min_count
-    # 종료 조건: 1이 되면 최소 연산 횟수 출력
-    if n == 1:
-        min_count = min(min_count, count)
-        return
-
-    # 가지치기: 이미 최소보다 count가 크면 중단
-    if count >= min_count:
-        return
-
-    # 연산
-    if n % 3 == 0:
-        recur(n // 3, count + 1)
-    if n % 2 == 0:
-        recur(n // 2, count + 1)
-
-    recur(n - 1, count + 1)
-
-min_count = 1e9
-recur(N, 0)
-print(min_count)
+# 함수 실행
+make_one()
