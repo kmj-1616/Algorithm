@@ -1,16 +1,33 @@
-N, K = map(int, input().split())  # N 종류의 동전으로 합 K 만들기
-coins = list(int(input()) for _ in range(N))
-# 규칙: 큰 동전부터 사용하기 -> 내림차순 정렬
-coins.sort(reverse=True)
+import sys
 
-count = 0 
-for coin in coins:
-		# 현재 동전이 K보다 작거나 같으면
-    if coin <= K:
-        count += (K // coin)  # 최대한 많이 사용하고
-        K = K % coin  # 나머지 금액 갱신
+input = sys.stdin.readline
+
+def get_min_coin_count():
+    # n: 동전 종류 수, k: 목표 금액
+    n, k = map(int, input().split())
+    
+    # 동전 가치 입력 (오름차순)
+    coins = []
+    for _ in range(n):
+        coins.append(int(input()))
+    
+    count = 0
+    
+    # 큰 가치의 동전부터 확인하기 위해 리스트를 뒤집어서 순회
+    for i in range(n - 1, -1, -1):
+        coin_value = coins[i]
         
-    if K == 0:  # 남은 금액이 없으면 종료 
-        break
- 
-print(count)  # 최소 동전 개수 
+        # 현재 동전으로 목표 금액을 채울 수 있으면
+        if k >= coin_value:
+            # k를 현재 동전으로 나눈 몫이 사용된 동전 개수
+            count += k // coin_value
+            # 남은 금액은 나머지
+            k %= coin_value
+            
+        # k가 0이 되면 더 이상 계산할 필요 없음
+        if k == 0:
+            break
+            
+    print(count)
+
+get_min_coin_count()
